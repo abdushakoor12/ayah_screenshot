@@ -28,6 +28,10 @@ function App() {
 
   const aspectRatioNum = aspectRatioType === "POST" ? 1 : 9 / 16;
 
+  const [textColor, setTextColor] = useState("#FFFFFF");
+  const [gradient1Color, setGradient1Color] = useState("#00D8FF");
+  const [gradient2Color, setGradient2Color] = useState("#BD34FE");
+
   async function loadAyah() {
     const url = `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/quran-uthmani`;
     const response = await fetch(url);
@@ -198,7 +202,7 @@ function App() {
       </div>
 
       <div className="flex w-full gap-2 items-center">
-        <h1 className="text-xl">Show Ayah</h1>
+        <h1 className="text-md">Show Ayah</h1>
 
         <input
           type="checkbox"
@@ -208,9 +212,9 @@ function App() {
           name="show-ayah"
         />
 
-        <div className="w-16" />
+        <div className="w-2" />
 
-        <h1 className="text-xl">Show Translation</h1>
+        <h1 className="text-md">Show Translation</h1>
 
         <input
           type="checkbox"
@@ -218,6 +222,37 @@ function App() {
           onChange={(e) => setShowTranslation(e.target.checked)}
           id="show-translation"
           name="show-translation"
+        />
+
+        <div className="h-4 w-[1px] bg-gray-400" />
+
+        <h1 className="text-md">Text Color</h1>
+
+        <input
+          type="color"
+          value={textColor}
+          onChange={(e) => setTextColor(e.target.value)}
+          className="border-2  w-12"
+        />
+      </div>
+
+      <div className="flex w-full gap-2 items-center">
+        <h1 className="text-xl">Gradient Colors</h1>
+
+        <div className="w-16" />
+
+        <input
+          type="color"
+          value={gradient1Color}
+          onChange={(e) => setGradient1Color(e.target.value)}
+          className="border-2  w-12"
+        />
+
+        <input
+          type="color"
+          value={gradient2Color}
+          onChange={(e) => setGradient2Color(e.target.value)}
+          className="border-2  w-12"
         />
       </div>
 
@@ -228,9 +263,11 @@ function App() {
         style={{
           aspectRatio: aspectRatioNum,
           width: "100%",
+          color: textColor,
           padding: `${padding}px`,
+          background: `linear-gradient(to right, ${gradient1Color}, ${gradient2Color})`,
         }}
-        className="aspect-square  text-white overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
+        className="aspect-square   overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
       >
         {showAyah && (
           <p
