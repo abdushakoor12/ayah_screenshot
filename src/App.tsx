@@ -14,7 +14,7 @@ function App() {
 
   const [ayahText, setAyahText] = useState("");
 
-  const [image, takeScreenshot] = useScreenshot()
+  const [_, takeScreenshot] = useScreenshot()
 
   const ref = useRef(null);
 
