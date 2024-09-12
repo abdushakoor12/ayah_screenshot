@@ -20,6 +20,8 @@ function App() {
   const [showTranslation, setShowTranslation] = useState(true);
   const [showAyah, setShowAyah] = useState(true);
 
+  const [padding, setPadding] = useState(16);
+
   const [_, takeScreenshot] = useScreenshot();
 
   const ref = useRef(null);
@@ -149,6 +151,22 @@ function App() {
         />
       </div>
 
+      <div className="flex flex-col items-center gap-2">
+        <label htmlFor="padding" className="text-xl">
+          Padding ({padding}px)
+        </label>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={padding}
+          onChange={(e) => setPadding(parseInt(e.target.value))}
+          id="padding-slider"
+          name="padding"
+          className="w-full"
+        />
+      </div>
+
       {/* switches */}
       <div className="flex flex-col items-center gap-2">
         <label htmlFor="show-ayah" className="text-xl">
@@ -183,6 +201,7 @@ function App() {
         style={{
           aspectRatio: aspectRatioNum,
           width: "100%",
+          padding: `${padding}px`,
         }}
         className="aspect-square  text-white overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
       >
