@@ -1,20 +1,26 @@
 import { useRef, useState } from "react";
-import { useScreenshot } from 'use-react-screenshot'
-
+import { useScreenshot } from "use-react-screenshot";
+import { TRANSLATIONS } from "./translations";
 
 const ASPECT_RATIO = ["POST", "STORY"];
 
 function App() {
   const [surah, setSurah] = useState("1");
   const [ayah, setAyah] = useState("");
+  const [translation, setTranslation] = useState("en.ahmedali");
 
   const [aspectRatioType, setAspectRatioType] = useState("POST");
 
   const [fontSize, setFontSize] = useState(16);
+  const [translationFontSize, setTranslationFontSize] = useState(16);
 
   const [ayahText, setAyahText] = useState("");
+  const [translationText, setTranslationText] = useState("");
 
-  const [_, takeScreenshot] = useScreenshot()
+  const [showTranslation, setShowTranslation] = useState(true);
+  const [showAyah, setShowAyah] = useState(true);
+
+  const [_, takeScreenshot] = useScreenshot();
 
   const ref = useRef(null);
 
@@ -31,6 +37,19 @@ function App() {
     }
 
     setAyahText(data.data.text);
+  }
+
+  async function loadTranslation() {
+    const url = `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/${translation}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (response.status !== 200) {
+      alert("Something went wrong");
+      return;
+    }
+
+    setTranslationText(data.data.text);
   }
 
   return (
@@ -60,8 +79,23 @@ function App() {
         className="border-2 border-gray-400 rounded-lg p-2 w-full"
       />
 
+      <select
+        value={translation}
+        onChange={(e) => setTranslation(e.target.value)}
+        className="border-2 border-gray-400 rounded-lg p-2 w-full"
+      >
+        {TRANSLATIONS.map((translation) => (
+          <option key={translation.identifier} value={translation.identifier}>
+            {translation.englishName} ({translation.language})
+          </option>
+        ))}
+      </select>
+
       <button
-        onClick={loadAyah}
+        onClick={() => {
+          loadAyah();
+          loadTranslation();
+        }}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
       >
         Load
@@ -99,16 +133,80 @@ function App() {
         />
       </div>
 
+      <div className="flex flex-col items-center gap-2">
+        <label htmlFor="translation-font" className="text-xl">
+          Translation Font Size
+        </label>
+        <input
+          type="range"
+          min="8"
+          max="100"
+          value={translationFontSize}
+          onChange={(e) => setTranslationFontSize(parseInt(e.target.value))}
+          id="translation-font-slider"
+          name="translation-font"
+          className="w-full"
+        />
+      </div>
+
+      {/* switches */}
+      <div className="flex flex-col items-center gap-2">
+        <label htmlFor="show-ayah" className="text-xl">
+          Show Ayah
+        </label>
+        <input
+          type="checkbox"
+          checked={showAyah}
+          onChange={(e) => setShowAyah(e.target.checked)}
+          id="show-ayah"
+          name="show-ayah"
+          className="w-full"
+        />
+      </div>
+
+      <div className="flex flex-col items-center gap-2">
+        <label htmlFor="show-translation" className="text-xl">
+          Show Translation
+        </label>
+        <input
+          type="checkbox"
+          checked={showTranslation}
+          onChange={(e) => setShowTranslation(e.target.checked)}
+          id="show-translation"
+          name="show-translation"
+          className="w-full"
+        />
+      </div>
+
       <div
         ref={ref}
         style={{
           aspectRatio: aspectRatioNum,
-          fontSize: `${fontSize}px`,
           width: "100%",
         }}
-        className="aspect-square text-center font-indopak text-white overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
+        className="aspect-square  text-white overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
       >
-        {ayahText}
+        {showAyah && (
+          <p
+            style={{
+              fontSize: `${fontSize}px`,
+            }}
+            className="text-center font-indopak"
+          >
+            {ayahText}
+          </p>
+        )}
+
+        {showTranslation && (
+          <p
+            style={{
+              fontSize: `${translationFontSize}px`,
+            }}
+            className="text-center font-serif"
+          >
+            {translationText}
+          </p>
+        )}
       </div>
 
       <button
@@ -118,7 +216,7 @@ function App() {
             link.href = image;
             link.download = "ayah.png";
             link.click();
-          })
+          });
         }}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
       >
