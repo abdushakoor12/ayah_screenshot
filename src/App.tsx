@@ -42,7 +42,10 @@ function App() {
   }
 
   async function loadTranslation() {
-    if (!translation) return;
+    if (!translation) {
+      setTranslationText("");
+      return;
+    }
 
     const url = `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/${translation}`;
     const response = await fetch(url);
@@ -121,26 +124,33 @@ function App() {
         </div>
       </form>
 
-      <div className="flex justify-center gap-2">
+      <hr className="border-gray-400 w-full" />
+
+      <div className="flex w-full gap-2 items-center">
+        <h1 className="text-xl">Type</h1>
+
+        <div className="flex-1" />
+
         {ASPECT_RATIO.map((type) => (
-          <button
+          <div
             key={type}
-            onClick={() => setAspectRatioType(type)}
             className={`${
               aspectRatioType === type
                 ? "bg-blue-500 hover:bg-blue-700"
                 : "bg-gray-400 hover:bg-gray-500"
-            } text-white font-bold py-2 rounded px-16`}
+            } text-white font-bold py-2 rounded px-8 flex items-center gap-2`}
+            onClick={() => setAspectRatioType(type)}
           >
             {type}
-          </button>
+          </div>
         ))}
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <label htmlFor="font" className="text-xl">
-          Font Size
-        </label>
+      <div className="flex w-full gap-2 items-center">
+        <h1 className="text-xl ">Font Size</h1>
+
+        <div className="w-16" />
+
         <input
           type="range"
           min="8"
@@ -149,14 +159,15 @@ function App() {
           onChange={(e) => setFontSize(parseInt(e.target.value))}
           id="font-slider"
           name="font"
-          className="w-full"
+          className="flex-1"
         />
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <label htmlFor="translation-font" className="text-xl">
-          Translation Font Size
-        </label>
+      <div className="flex w-full gap-2 items-center">
+        <h1 className="text-xl">Translation Font Size</h1>
+
+        <div className="w-16" />
+
         <input
           type="range"
           min="8"
@@ -165,14 +176,15 @@ function App() {
           onChange={(e) => setTranslationFontSize(parseInt(e.target.value))}
           id="translation-font-slider"
           name="translation-font"
-          className="w-full"
+          className="flex-1"
         />
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <label htmlFor="padding" className="text-xl">
-          Padding ({padding}px)
-        </label>
+      <div className="flex w-full gap-2 items-center">
+        <h1 className="text-xl">Padding</h1>
+
+        <div className="w-16" />
+
         <input
           type="range"
           min="0"
@@ -181,38 +193,35 @@ function App() {
           onChange={(e) => setPadding(parseInt(e.target.value))}
           id="padding-slider"
           name="padding"
-          className="w-full"
+          className="flex-1"
         />
       </div>
 
-      {/* switches */}
-      <div className="flex flex-col items-center gap-2">
-        <label htmlFor="show-ayah" className="text-xl">
-          Show Ayah
-        </label>
+      <div className="flex w-full gap-2 items-center">
+        <h1 className="text-xl">Show Ayah</h1>
+
         <input
           type="checkbox"
           checked={showAyah}
           onChange={(e) => setShowAyah(e.target.checked)}
           id="show-ayah"
           name="show-ayah"
-          className="w-full"
         />
-      </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <label htmlFor="show-translation" className="text-xl">
-          Show Translation
-        </label>
+        <div className="w-16" />
+
+        <h1 className="text-xl">Show Translation</h1>
+
         <input
           type="checkbox"
           checked={showTranslation}
           onChange={(e) => setShowTranslation(e.target.checked)}
           id="show-translation"
           name="show-translation"
-          className="w-full"
         />
       </div>
+
+      <hr className="border-gray-400 w-full" />
 
       <div
         ref={ref}
