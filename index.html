@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400..700&display=swap");
+
+      body {
+        font-family: "Noto Naskh Arabic", sans-serif;
+        background-color: transparent;
+      }
+    </style>
+
+    <title>Ayah Screenshot</title>
+  </head>
+  <body>
+    <div class="container mx-auto flex flex-col items-center gap-4">
+      <form id="form" class="flex flex-col items-center gap-2">
+        <label for="surah" class="text-xl">Enter Surah Number</label>
+        <input
+          type="number"
+          required
+          min="1"
+          max="114"
+          type="number"
+          id="surah"
+          name="surah"
+          class="border-2 border-gray-400 rounded-lg p-2"
+        />
+
+        <label for="ayah" class="text-xl">Enter Ayah Number</label>
+        <input
+          type="number"
+          id="ayah"
+          required
+          min="1"
+          max="286"
+          name="ayah"
+          class="border-2 border-gray-400 rounded-lg p-2"
+        />
+
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Generate Card
+        </button>
+      </form>
+
+      <!-- slider for padding -->
+      <div class="flex flex-col items-center gap-2">
+        <label for="padding" class="text-xl">Padding</label>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="16"
+          id="padding-slider"
+          name="padding"
+          class="w-full"
+        />
+      </div>
+
+      <!-- width of card -->
+      <div class="flex flex-col items-center gap-2">
+        <label for="width" class="text-xl">Width</label>
+        <input type="range" min="100" max="600" value="300" id="width-slider"
+        name="width" class="w-full"
+      </div>
+
+      <!-- font slider -->
+      <div class="flex flex-col items-center gap-2">
+        <label for="font" class="text-xl">Font</label>
+        <input type="range" min="8" max="100" value="16" id="font-slider"
+        name="font" class="w-full"
+      </div>
+
+      <!-- line height -->
+        <div class="flex flex-col items-center gap-2">
+          <label for="line-height" class="text-xl">Line Height</label>
+          <input type="range" min="1" max="2"
+          step="0.1"
+          value="1.5" id="line-height-slider"
+          name="line-height" class="w-full"
+        </div>
+
+      <!-- card -->
+
+      <div
+        id="ayah-card"
+        style="padding: 16px; width: 300px; font-size: 16px; line-height: 1.5;"
+        class="rounded-md text-white overflow-clip bg-gradient-to-r from-blue-500 to-blue-700"
+      >
+        <p id="ayah-text" class="text-xl text-center  gap-4"></p>
+      </div>
+
+      <button
+      id="download-btn"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
+      Download Image
+    </button>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
