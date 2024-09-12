@@ -7,7 +7,7 @@ const ASPECT_RATIO = ["POST", "STORY"];
 function App() {
   const [surah, setSurah] = useState("1");
   const [ayah, setAyah] = useState("");
-  const [translation, setTranslation] = useState("en.ahmedali");
+  const [translation, setTranslation] = useState<string | undefined>(undefined);
 
   const [aspectRatioType, setAspectRatioType] = useState("POST");
 
@@ -42,6 +42,8 @@ function App() {
   }
 
   async function loadTranslation() {
+    if (!translation) return;
+
     const url = `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/${translation}`;
     const response = await fetch(url);
     const data = await response.json();
@@ -56,52 +58,68 @@ function App() {
 
   return (
     <div className="container mx-auto flex max-w-lg min-w-lg flex-col items-center gap-4 py-4">
-      <select
-        value={surah}
-        onChange={(e) => setSurah(e.target.value)}
-        className="border-2 border-gray-400 rounded-lg p-2 w-full"
-      >
-        {Array.from({ length: 114 }, (_, i) => (
-          <option key={i + 1} value={i + 1}>
-            Surah {i + 1}
-          </option>
-        ))}
-      </select>
-
-      <input
-        type="number"
-        id="ayah"
-        value={ayah}
-        onChange={(e) => setAyah(e.target.value)}
-        required
-        placeholder="Enter Ayah Number"
-        min="1"
-        max="286"
-        name="ayah"
-        className="border-2 border-gray-400 rounded-lg p-2 w-full"
-      />
-
-      <select
-        value={translation}
-        onChange={(e) => setTranslation(e.target.value)}
-        className="border-2 border-gray-400 rounded-lg p-2 w-full"
-      >
-        {TRANSLATIONS.map((translation) => (
-          <option key={translation.identifier} value={translation.identifier}>
-            {translation.englishName} ({translation.language})
-          </option>
-        ))}
-      </select>
-
-      <button
-        onClick={() => {
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
           loadAyah();
           loadTranslation();
         }}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
+        className="w-full flex flex-col gap-2"
       >
-        Load
-      </button>
+        <div className="flex gap-2 items-center w-full">
+          <select
+            value={surah}
+            onChange={(e) => setSurah(e.target.value)}
+            className="border-2 border-gray-400 rounded-lg p-2 w-full"
+          >
+            {Array.from({ length: 114 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                Surah {i + 1}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="number"
+            id="ayah"
+            value={ayah}
+            onChange={(e) => setAyah(e.target.value)}
+            required
+            placeholder="Enter Ayah Number"
+            min="1"
+            max="286"
+            name="ayah"
+            className="border-2 border-gray-400 rounded-lg p-2 w-full"
+          />
+        </div>
+
+        <div className="flex gap-2 items-center w-full">
+          <select
+            value={translation}
+            onChange={(e) => setTranslation(e.target.value)}
+            className="border-2 border-gray-400 rounded-lg p-2 w-full"
+          >
+            <option value={undefined} disabled>
+              Select Translation
+            </option>
+            {TRANSLATIONS.map((translation) => (
+              <option
+                key={translation.identifier}
+                value={translation.identifier}
+              >
+                {translation.englishName} ({translation.language})
+              </option>
+            ))}
+          </select>
+
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
+          >
+            Load
+          </button>
+        </div>
+      </form>
 
       <div className="flex justify-center gap-2">
         {ASPECT_RATIO.map((type) => (
