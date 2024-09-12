@@ -39,7 +39,7 @@ form.addEventListener("submit", async (e) => {
   const surah = document.getElementById("surah").value;
   const ayah = document.getElementById("ayah").value;
 
-  const url = `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}`;
+  const url = `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/quran-uthmani`;
   const response = await fetch(url);
   const data = await response.json();
 
