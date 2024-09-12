@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "IndoPak";
+  src: local("indopak"), url("./assets//fonts/indopak.ttf") format("truetype");
+}
