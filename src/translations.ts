@@ -1062,4 +1062,4 @@ export const TRANSLATIONS: Translation[] = [
     type: "translation",
     direction: "ltr",
   },
-];
+].sort((a, b) => a.language.localeCompare(b.language));
