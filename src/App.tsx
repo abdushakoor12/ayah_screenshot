@@ -7,7 +7,7 @@ const ASPECT_RATIO = ["POST", "STORY"];
 function App() {
   const [surah, setSurah] = useState("1");
   const [ayah, setAyah] = useState("");
-  const [translation, setTranslation] = useState<string | undefined>(undefined);
+  const [translation, setTranslation] = useState<string | undefined>("en.asad");
 
   const [aspectRatioType, setAspectRatioType] = useState("POST");
 
@@ -273,8 +273,9 @@ function App() {
           <p
             style={{
               fontSize: `${fontSize}px`,
+              fontFamily: "indopak",
             }}
-            className="text-center font-indopak"
+            className="text-center"
           >
             {ayahText}
           </p>
