@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useScreenshot } from "use-react-screenshot";
 import { TRANSLATIONS } from "./translations";
+import { SURAH_LIST } from "./surahs";
 
 const ASPECT_RATIO = ["POST", "STORY"];
 
@@ -79,9 +80,9 @@ function App() {
             onChange={(e) => setSurah(e.target.value)}
             className="border-2 border-gray-400 rounded-lg p-2 w-full"
           >
-            {Array.from({ length: 114 }, (_, i) => (
-              <option key={i + 1} value={i + 1}>
-                Surah {i + 1}
+            {SURAH_LIST.map((surah) => (
+              <option key={surah.number} value={surah.number}>
+                {surah.number}. {surah.englishName}
               </option>
             ))}
           </select>
