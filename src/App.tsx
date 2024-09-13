@@ -23,6 +23,8 @@ function App() {
 
   const [padding, setPadding] = useState(16);
 
+  const selectedSurah = SURAH_LIST.find((e) => e.number.toString() === surah);
+
   const [_, takeScreenshot] = useScreenshot();
 
   const ref = useRef(null);
@@ -292,6 +294,19 @@ function App() {
             {translationText}
           </p>
         )}
+
+        <p
+        style={{
+          fontSize: `12px`,
+          fontWeight: "bold",
+        }}
+        >
+          {
+            selectedSurah
+              ? `[ ${ayah} ] [ ${selectedSurah.name} ]`
+              : ""
+          }
+        </p>
       </div>
 
       <button
