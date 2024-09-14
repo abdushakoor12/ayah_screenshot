@@ -16,15 +16,28 @@ export interface AppState {
 }
 
 export enum AspectRatioType {
-  POST = 1/1,
-  STORY = 9/16,
-  LANDSCAPE = 16/9,
+  POST = "POST",
+  STORY = "STORY",
+  LANDSCAPE = "LANDSCAPE",
+}
+
+export function getAspectRatioNum(aspectRatioType: AspectRatioType): number {
+  switch (aspectRatioType) {
+    case AspectRatioType.POST:
+      return 1;
+    case AspectRatioType.STORY:
+      return 9/16;
+    case AspectRatioType.LANDSCAPE:
+      return 16/9;
+    default:
+      return 1;
+  }
 }
 
 const initialState: AppState = {
   surah: "1",
   ayah: "",
-  translation: "",
+  translation: "en.asad",
   aspectRatioType: AspectRatioType.POST,
   fontSize: 16,
   translationFontSize: 16,

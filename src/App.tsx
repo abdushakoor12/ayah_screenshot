@@ -4,40 +4,31 @@ import { TRANSLATIONS } from "./translations";
 import { SURAH_LIST } from "./surahs";
 import { gradientColors } from "./gradients";
 import { useAtom } from "jotai";
-import { appStateAtom } from "./appStateAtom";
-
-const ASPECT_RATIO = ["POST", "STORY"];
+import {
+  appStateAtom,
+  AspectRatioType,
+  getAspectRatioNum,
+} from "./appStateAtom";
 
 function App() {
   const [appState, setAppState] = useAtom(appStateAtom);
   const {
     surah,
     ayah,
-    // translation,
-    // aspectRatioType,
-    // fontSize,
-    // translationFontSize,
-    // padding,
-    // showAyah,
-    // showTranslation,
-    // textColor,
-    // gradient1Color,
-    // gradient2Color,
+    translation,
+    aspectRatioType,
+    fontSize,
+    translationFontSize,
+    padding,
+    showAyah,
+    showTranslation,
+    textColor,
+    gradient1Color,
+    gradient2Color,
   } = appState;
-  const [translation, setTranslation] = useState<string | undefined>("en.asad");
-
-  const [aspectRatioType, setAspectRatioType] = useState("POST");
-
-  const [fontSize, setFontSize] = useState(16);
-  const [translationFontSize, setTranslationFontSize] = useState(16);
 
   const [ayahText, setAyahText] = useState("");
   const [translationText, setTranslationText] = useState("");
-
-  const [showTranslation, setShowTranslation] = useState(true);
-  const [showAyah, setShowAyah] = useState(true);
-
-  const [padding, setPadding] = useState(16);
 
   const selectedSurah = SURAH_LIST.find((e) => e.number.toString() === surah);
 
@@ -45,11 +36,7 @@ function App() {
 
   const ref = useRef(null);
 
-  const aspectRatioNum = aspectRatioType === "POST" ? 1 : 9 / 16;
-
-  const [textColor, setTextColor] = useState("#FFFFFF");
-  const [gradient1Color, setGradient1Color] = useState("#00D8FF");
-  const [gradient2Color, setGradient2Color] = useState("#BD34FE");
+  const aspectRatioNum = getAspectRatioNum(aspectRatioType);
 
   async function loadAyah(surah: string, ayah: string) {
     const url = `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/quran-uthmani`;
@@ -146,7 +133,12 @@ function App() {
         <div className="flex gap-2 items-center w-full">
           <select
             value={translation}
-            onChange={(e) => setTranslation(e.target.value)}
+            onChange={(e) => {
+              setAppState({
+                ...appState,
+                translation: e.target.value,
+              });
+            }}
             className="border-2 border-gray-400 rounded-lg p-2 w-full"
           >
             <option value={undefined} disabled>
@@ -200,15 +192,24 @@ function App() {
 
         <div className="flex-1" />
 
-        {ASPECT_RATIO.map((type) => (
+        {[
+          AspectRatioType.POST,
+          AspectRatioType.STORY,
+          AspectRatioType.LANDSCAPE,
+        ].map((type) => (
           <div
             key={type}
             className={`${
               aspectRatioType === type
                 ? "bg-blue-500 hover:bg-blue-700"
                 : "bg-gray-400 hover:bg-gray-500"
-            } text-white font-bold py-2 rounded px-8 flex items-center gap-2`}
-            onClick={() => setAspectRatioType(type)}
+            } text-white font-bold py-2 rounded px-4 flex items-center gap-2 cursor-pointer`}
+            onClick={() => {
+              setAppState({
+                ...appState,
+                aspectRatioType: type,
+              });
+            }}
           >
             {type}
           </div>
@@ -225,7 +226,12 @@ function App() {
           min="8"
           max="100"
           value={fontSize}
-          onChange={(e) => setFontSize(parseInt(e.target.value))}
+          onChange={(e) => {
+            setAppState({
+              ...appState,
+              fontSize: parseInt(e.target.value),
+            });
+          }}
           id="font-slider"
           name="font"
           className="flex-1"
@@ -242,7 +248,12 @@ function App() {
           min="8"
           max="100"
           value={translationFontSize}
-          onChange={(e) => setTranslationFontSize(parseInt(e.target.value))}
+          onChange={(e) => {
+            setAppState({
+              ...appState,
+              translationFontSize: parseInt(e.target.value),
+            });
+          }}
           id="translation-font-slider"
           name="translation-font"
           className="flex-1"
@@ -259,7 +270,12 @@ function App() {
           min="0"
           max="100"
           value={padding}
-          onChange={(e) => setPadding(parseInt(e.target.value))}
+          onChange={(e) => {
+            setAppState({
+              ...appState,
+              padding: parseInt(e.target.value),
+            });
+          }}
           id="padding-slider"
           name="padding"
           className="flex-1"
@@ -272,7 +288,12 @@ function App() {
         <input
           type="checkbox"
           checked={showAyah}
-          onChange={(e) => setShowAyah(e.target.checked)}
+          onChange={(e) => {
+            setAppState({
+              ...appState,
+              showAyah: e.target.checked,
+            });
+          }}
           id="show-ayah"
           name="show-ayah"
         />
@@ -284,7 +305,12 @@ function App() {
         <input
           type="checkbox"
           checked={showTranslation}
-          onChange={(e) => setShowTranslation(e.target.checked)}
+          onChange={(e) => {
+            setAppState({
+              ...appState,
+              showTranslation: e.target.checked,
+            });
+          }}
           id="show-translation"
           name="show-translation"
         />
@@ -296,7 +322,12 @@ function App() {
         <input
           type="color"
           value={textColor}
-          onChange={(e) => setTextColor(e.target.value)}
+          onChange={(e) => {
+            setAppState({
+              ...appState,
+              textColor: e.target.value,
+            });
+          }}
           className="border-2  w-12"
         />
       </div>
@@ -309,14 +340,24 @@ function App() {
         <input
           type="color"
           value={gradient1Color}
-          onChange={(e) => setGradient1Color(e.target.value)}
+          onChange={(e) => {
+            setAppState({
+              ...appState,
+              gradient1Color: e.target.value,
+            });
+          }}
           className="border-2  w-12"
         />
 
         <input
           type="color"
           value={gradient2Color}
-          onChange={(e) => setGradient2Color(e.target.value)}
+          onChange={(e) => {
+            setAppState({
+              ...appState,
+              gradient2Color: e.target.value,
+            });
+          }}
           className="border-2  w-12"
         />
       </div>
@@ -336,8 +377,11 @@ function App() {
                 : "bg-gray-400 hover:bg-gray-500"
             } text-white font-bold aspect-square rounded`}
             onClick={() => {
-              setGradient1Color(gradient.start);
-              setGradient2Color(gradient.end);
+              setAppState({
+                ...appState,
+                gradient1Color: gradient.start,
+                gradient2Color: gradient.end,
+              });
             }}
           ></div>
         ))}
