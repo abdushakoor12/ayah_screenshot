@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useScreenshot } from "use-react-screenshot";
 import { TRANSLATIONS } from "./translations";
 import { SURAH_LIST } from "./surahs";
+import { gradientColors } from "./gradients";
 
 const ASPECT_RATIO = ["POST", "STORY"];
 
@@ -259,6 +260,28 @@ function App() {
         />
       </div>
 
+      <div className="flex w-full gap-2 overflow-x-auto">
+        {gradientColors.map((gradient) => (
+          <div
+            style={{
+              aspectRatio: 1,
+              width: "100%",
+              background: `linear-gradient(to right, ${gradient.start}, ${gradient.end})`,
+            }}
+            key={gradient.start}
+            className={`${
+              gradient1Color === gradient.start
+                ? "bg-blue-500 hover:bg-blue-700"
+                : "bg-gray-400 hover:bg-gray-500"
+            } text-white font-bold aspect-square rounded`}
+            onClick={() => {
+              setGradient1Color(gradient.start);
+              setGradient2Color(gradient.end);
+            }}
+          ></div>
+        ))}
+      </div>
+
       <hr className="border-gray-400 w-full" />
 
       <div
@@ -296,16 +319,12 @@ function App() {
         )}
 
         <p
-        style={{
-          fontSize: `12px`,
-          fontWeight: "bold",
-        }}
+          style={{
+            fontSize: `12px`,
+            fontWeight: "bold",
+          }}
         >
-          {
-            selectedSurah
-              ? `[ ${ayah} ] [ ${selectedSurah.name} ]`
-              : ""
-          }
+          {selectedSurah ? `[ ${ayah} ] [ ${selectedSurah.name} ]` : ""}
         </p>
       </div>
 
