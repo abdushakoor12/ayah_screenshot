@@ -3,12 +3,27 @@ import { useScreenshot } from "use-react-screenshot";
 import { TRANSLATIONS } from "./translations";
 import { SURAH_LIST } from "./surahs";
 import { gradientColors } from "./gradients";
+import { useAtom } from "jotai";
+import { appStateAtom } from "./appStateAtom";
 
 const ASPECT_RATIO = ["POST", "STORY"];
 
 function App() {
-  const [surah, setSurah] = useState("1");
-  const [ayah, setAyah] = useState("");
+  const [appState, setAppState] = useAtom(appStateAtom);
+  const {
+    surah,
+    ayah,
+    // translation,
+    // aspectRatioType,
+    // fontSize,
+    // translationFontSize,
+    // padding,
+    // showAyah,
+    // showTranslation,
+    // textColor,
+    // gradient1Color,
+    // gradient2Color,
+  } = appState;
   const [translation, setTranslation] = useState<string | undefined>("en.asad");
 
   const [aspectRatioType, setAspectRatioType] = useState("POST");
@@ -36,7 +51,7 @@ function App() {
   const [gradient1Color, setGradient1Color] = useState("#00D8FF");
   const [gradient2Color, setGradient2Color] = useState("#BD34FE");
 
-  async function loadAyah() {
+  async function loadAyah(surah: string, ayah: string) {
     const url = `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/quran-uthmani`;
     const response = await fetch(url);
     const data = await response.json();
@@ -51,14 +66,19 @@ function App() {
 
   function loadRandom() {
     const surahRandom = getRandomItem(SURAH_LIST);
-    setSurah(surahRandom.number.toString());
-    setAyah(getRandomIntBetween(1, surahRandom.numberOfAyahs).toString());
+    const ayahRandom = getRandomIntBetween(1, surahRandom.numberOfAyahs);
 
-    loadAyah();
-    loadTranslation();
+    setAppState({
+      ...appState,
+      surah: surahRandom.number.toString(),
+      ayah: ayahRandom.toString(),
+    });
+
+    loadAyah(surahRandom.number.toString(), ayahRandom.toString());
+    loadTranslation(surahRandom.number.toString(), ayahRandom.toString());
   }
 
-  async function loadTranslation() {
+  async function loadTranslation(surah: string, ayah: string) {
     if (!translation) {
       setTranslationText("");
       return;
@@ -81,15 +101,20 @@ function App() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          loadAyah();
-          loadTranslation();
+          loadAyah(surah, ayah);
+          loadTranslation(surah, ayah);
         }}
         className="w-full flex flex-col gap-2"
       >
         <div className="flex gap-2 items-center w-full">
           <select
             value={surah}
-            onChange={(e) => setSurah(e.target.value)}
+            onChange={(e) => {
+              setAppState({
+                ...appState,
+                surah: e.target.value,
+              });
+            }}
             className="border-2 border-gray-400 rounded-lg p-2 w-full"
           >
             {SURAH_LIST.map((surah) => (
@@ -103,7 +128,12 @@ function App() {
             type="number"
             id="ayah"
             value={ayah}
-            onChange={(e) => setAyah(e.target.value)}
+            onChange={(e) => {
+              setAppState({
+                ...appState,
+                ayah: e.target.value,
+              });
+            }}
             required
             placeholder="Enter Ayah Number"
             min="1"
@@ -376,11 +406,11 @@ function App() {
   );
 }
 
-function getRandomIntBetween(min: number, max: number) {
+function getRandomIntBetween(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getRandomItem<T>(array: T[]) {
+function getRandomItem<T>(array: T[]): T {
   return array[getRandomIntBetween(0, array.length - 1)];
 }
 
