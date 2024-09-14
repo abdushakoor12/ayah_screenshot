@@ -9,6 +9,7 @@ import {
   AspectRatioType,
   getAspectRatioNum,
 } from "./appStateAtom";
+import { BACKGROUNDS } from "./backgrounds";
 
 function App() {
   const [appState, setAppState] = useAtom(appStateAtom);
@@ -25,6 +26,8 @@ function App() {
     textColor,
     gradient1Color,
     gradient2Color,
+    backgroundImageUrl,
+    backgroundType,
   } = appState;
 
   const [ayahText, setAyahText] = useState("");
@@ -333,59 +336,109 @@ function App() {
       </div>
 
       <div className="flex w-full gap-2 items-center">
-        <h1 className="text-xl">Gradient Colors</h1>
+        <h1 className="text-xl">Background</h1>
 
         <div className="w-16" />
 
-        <input
-          type="color"
-          value={gradient1Color}
+        <select
+          value={backgroundType}
           onChange={(e) => {
             setAppState({
               ...appState,
-              gradient1Color: e.target.value,
+              backgroundType: e.target.value as "gradient" | "image",
             });
           }}
-          className="border-2  w-12"
-        />
-
-        <input
-          type="color"
-          value={gradient2Color}
-          onChange={(e) => {
-            setAppState({
-              ...appState,
-              gradient2Color: e.target.value,
-            });
-          }}
-          className="border-2  w-12"
-        />
+          className="border-2 border-gray-400 rounded-lg p-2 w-full"
+        >
+          <option value="gradient">Gradient</option>
+          <option value="image">Image</option>
+        </select>
       </div>
 
-      <div className="flex w-full gap-2 overflow-x-auto">
-        {gradientColors.map((gradient) => (
-          <div
-            style={{
-              aspectRatio: 1,
-              width: "100%",
-              background: `linear-gradient(to right, ${gradient.start}, ${gradient.end})`,
-            }}
-            key={gradient.start}
-            className={`${
-              gradient1Color === gradient.start
-                ? "bg-blue-500 hover:bg-blue-700"
-                : "bg-gray-400 hover:bg-gray-500"
-            } text-white font-bold aspect-square rounded`}
-            onClick={() => {
-              setAppState({
-                ...appState,
-                gradient1Color: gradient.start,
-                gradient2Color: gradient.end,
-              });
-            }}
-          ></div>
-        ))}
-      </div>
+      {backgroundType === "gradient" && (
+        <>
+          <div className="flex w-full gap-2 items-center">
+            <h1 className="text-xl">Gradient Colors</h1>
+
+            <div className="w-16" />
+
+            <input
+              type="color"
+              value={gradient1Color}
+              onChange={(e) => {
+                setAppState({
+                  ...appState,
+                  gradient1Color: e.target.value,
+                });
+              }}
+              className="border-2  w-12"
+            />
+
+            <input
+              type="color"
+              value={gradient2Color}
+              onChange={(e) => {
+                setAppState({
+                  ...appState,
+                  gradient2Color: e.target.value,
+                });
+              }}
+              className="border-2  w-12"
+            />
+          </div>
+
+          <div className="flex w-full gap-2 overflow-x-auto">
+            {gradientColors.map((gradient) => (
+              <div
+                style={{
+                  aspectRatio: 1,
+                  width: "100%",
+                  background: `linear-gradient(to right, ${gradient.start}, ${gradient.end})`,
+                }}
+                key={gradient.start}
+                className={`${
+                  gradient1Color === gradient.start
+                    ? "bg-blue-500 hover:bg-blue-700"
+                    : "bg-gray-400 hover:bg-gray-500"
+                } text-white font-bold aspect-square rounded`}
+                onClick={() => {
+                  setAppState({
+                    ...appState,
+                    gradient1Color: gradient.start,
+                    gradient2Color: gradient.end,
+                  });
+                }}
+              ></div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {backgroundType === "image" && (
+        <div className="flex w-full gap-2 items-center">
+          {BACKGROUNDS.map((backgroundImageUrl) => (
+            <div
+              style={{
+                aspectRatio: 1,
+                width: "100%",
+                background: `url(${backgroundImageUrl})`,
+              }}
+              key={backgroundImageUrl}
+              className={`${
+                backgroundImageUrl === backgroundImageUrl
+                  ? "bg-blue-500 hover:bg-blue-700"
+                  : "bg-gray-400 hover:bg-gray-500"
+              } text-white font-bold aspect-square rounded`}
+              onClick={() => {
+                setAppState({
+                  ...appState,
+                  backgroundImageUrl: backgroundImageUrl,
+                });
+              }}
+            ></div>
+          ))}
+        </div>
+      )}
 
       <hr className="border-gray-400 w-full" />
 
@@ -396,7 +449,11 @@ function App() {
           width: "100%",
           color: textColor,
           padding: `${padding}px`,
-          background: `linear-gradient(to right, ${gradient1Color}, ${gradient2Color})`,
+          background:
+          backgroundType === "gradient" ?
+          `linear-gradient(to right, ${gradient1Color}, ${gradient2Color})`
+          : `url(${backgroundImageUrl})`
+          ,
         }}
         className="aspect-square   overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
       >
