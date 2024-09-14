@@ -49,6 +49,15 @@ function App() {
     setAyahText(data.data.text);
   }
 
+  function loadRandom() {
+    const surahRandom = getRandomItem(SURAH_LIST);
+    setSurah(surahRandom.number.toString());
+    setAyah(getRandomIntBetween(1, surahRandom.numberOfAyahs).toString());
+
+    loadAyah();
+    loadTranslation();
+  }
+
   async function loadTranslation() {
     if (!translation) {
       setTranslationText("");
@@ -135,17 +144,24 @@ function App() {
           type="button"
           className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 rounded px-16"
           onClick={() => {
-            const surahRandom = getRandomItem(SURAH_LIST);
-            setSurah(surahRandom.number.toString());
-            setAyah(getRandomIntBetween(1, surahRandom.numberOfAyahs).toString());
-
-            loadAyah();
-            loadTranslation();
+            loadRandom();
           }}
         >
           Randomize
         </button>
       </form>
+
+      <textarea
+        value={ayahText}
+        onChange={(e) => setAyahText(e.target.value)}
+        className="w-full h-16 border-2 text-right border-gray-400 rounded-lg p-2 resize-none"
+      />
+
+      <textarea
+        value={translationText}
+        onChange={(e) => setTranslationText(e.target.value)}
+        className="w-full h-16 border-2 border-gray-400 rounded-lg p-2 resize-none"
+      />
 
       <hr className="border-gray-400 w-full" />
 
