@@ -122,14 +122,29 @@ function App() {
               </option>
             ))}
           </select>
-
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
-          >
-            Load
-          </button>
         </div>
+
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
+        >
+          Load
+        </button>
+
+        <button
+          type="button"
+          className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 rounded px-16"
+          onClick={() => {
+            const surahRandom = getRandomItem(SURAH_LIST);
+            setSurah(surahRandom.number.toString());
+            setAyah(getRandomIntBetween(1, surahRandom.numberOfAyahs).toString());
+
+            loadAyah();
+            loadTranslation();
+          }}
+        >
+          Randomize
+        </button>
       </form>
 
       <hr className="border-gray-400 w-full" />
@@ -343,6 +358,14 @@ function App() {
       </button>
     </div>
   );
+}
+
+function getRandomIntBetween(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRandomItem<T>(array: T[]) {
+  return array[getRandomIntBetween(0, array.length - 1)];
 }
 
 export default App;
