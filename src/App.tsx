@@ -97,7 +97,7 @@ function App() {
             required
             placeholder="Enter Ayah Number"
             min="1"
-            max="286"
+            max={selectedSurah?.numberOfAyahs}
             name="ayah"
             className="border-2 border-gray-400 rounded-lg p-2 w-full"
           />
