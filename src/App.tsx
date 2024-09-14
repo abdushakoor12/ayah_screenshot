@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { useScreenshot } from "use-react-screenshot";
 import { TRANSLATIONS } from "./translations";
 import { SURAH_LIST } from "./surahs";
 import { gradientColors } from "./gradients";
@@ -10,6 +9,7 @@ import {
   getAspectRatioNum,
 } from "./appStateAtom";
 import { BACKGROUNDS } from "./backgrounds";
+import html2canvas from "html2canvas";
 
 function App() {
   const [appState, setAppState] = useAtom(appStateAtom);
@@ -34,8 +34,6 @@ function App() {
   const [translationText, setTranslationText] = useState("");
 
   const selectedSurah = SURAH_LIST.find((e) => e.number.toString() === surah);
-
-  const [_, takeScreenshot] = useScreenshot();
 
   const ref = useRef(null);
 
@@ -66,6 +64,31 @@ function App() {
 
     loadAyah(surahRandom.number.toString(), ayahRandom.toString());
     loadTranslation(surahRandom.number.toString(), ayahRandom.toString());
+  }
+
+  async function takeScreenshot2(node: HTMLElement) {
+    const canvas = await html2canvas(node, {
+      useCORS: true,
+    });
+    const croppedCanvas = document.createElement("canvas");
+    const croppedCanvasContext = croppedCanvas.getContext("2d");
+    // init data
+    const cropPositionTop = 0;
+    const cropPositionLeft = 0;
+    const cropWidth = canvas.width;
+    const cropHeight = canvas.height;
+    croppedCanvas.width = cropWidth;
+    croppedCanvas.height = cropHeight;
+    croppedCanvasContext!.drawImage(
+      canvas,
+      cropPositionLeft,
+      cropPositionTop
+    );
+    const base64Image = croppedCanvas.toDataURL();
+    const link = document.createElement("a");
+    link.href = base64Image;
+    link.download = `${surah}:${ayah}.png`;
+    link.click();
   }
 
   async function loadTranslation(surah: string, ayah: string) {
@@ -450,12 +473,11 @@ function App() {
           color: textColor,
           padding: `${padding}px`,
           background:
-          backgroundType === "gradient" ?
-          `linear-gradient(to right, ${gradient1Color}, ${gradient2Color})`
-          : `url(${backgroundImageUrl})`
-          ,
+            backgroundType === "gradient"
+              ? `linear-gradient(to right, ${gradient1Color}, ${gradient2Color})`
+              : `url(${backgroundImageUrl})`,
         }}
-        className="aspect-square   overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
+        className="aspect-square overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
       >
         {showAyah && (
           <p
@@ -492,12 +514,13 @@ function App() {
 
       <button
         onClick={() => {
-          takeScreenshot(ref.current).then((image: any) => {
-            const link = document.createElement("a");
-            link.href = image;
-            link.download = "ayah.png";
-            link.click();
-          });
+          takeScreenshot2(ref.current!);
+          // takeScreenshot(ref.current).then((image: any) => {
+          //   const link = document.createElement("a");
+          //   link.href = image;
+          //   link.download = "ayah.png";
+          //   link.click();
+          // });
         }}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
       >

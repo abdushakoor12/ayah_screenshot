@@ -1,1 +1,1 @@
-{"root":["./src/App.tsx","./src/main.tsx","./src/react-app-env.d.ts","./src/surahs.ts","./src/translations.ts","./src/vite-env.d.ts"],"version":"5.6.2"}
+{"root":["./src/App.tsx","./src/appStateAtom.ts","./src/backgrounds.ts","./src/gradients.ts","./src/main.tsx","./src/react-app-env.d.ts","./src/surahs.ts","./src/translations.ts","./src/vite-env.d.ts"],"version":"5.6.2"}
