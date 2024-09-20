@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TRANSLATIONS } from "./translations";
 import { SURAH_LIST } from "./surahs";
 import { gradientColors } from "./gradients";
@@ -65,6 +65,10 @@ function App() {
     loadAyah(surahRandom.number.toString(), ayahRandom.toString());
     loadTranslation(surahRandom.number.toString(), ayahRandom.toString());
   }
+
+  useEffect(() => {
+    loadRandom();
+  }, []);
 
   async function takeScreenshot2(node: HTMLElement) {
     const canvas = await html2canvas(node, {
