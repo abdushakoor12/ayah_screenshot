@@ -10,9 +10,11 @@ import {
 } from "./appStateAtom";
 import { BACKGROUNDS } from "./backgrounds";
 import html2canvas from "html2canvas";
+import { FONTS_LISTS } from "./fonts_list";
 
 function App() {
   const [appState, setAppState] = useAtom(appStateAtom);
+  const [font, setFont] = useState<string>(FONTS_LISTS[0]);
   const {
     surah,
     ayah,
@@ -137,7 +139,7 @@ function App() {
             <p
               style={{
                 fontSize: `${fontSize}px`,
-                fontFamily: "indopak",
+                fontFamily: `${font}`,
               }}
               className="text-center"
             >
@@ -441,6 +443,26 @@ function App() {
         >
           <option value="gradient">Gradient</option>
           <option value="image">Image</option>
+        </select>
+      </div>
+
+      <div className="flex w-full gap-2 items-center">
+        <h1 className="text-xl">Font</h1>
+
+        <div className="w-16" />
+
+        <select
+          value={font}
+          onChange={(e) => {
+            setFont(e.target.value);
+          }}
+          className="border-2 border-gray-400 rounded-lg p-2 w-full"
+        >
+          {FONTS_LISTS.map((font) => (
+            <option key={font} value={font}>
+              {font}
+            </option>
+          ))}
         </select>
       </div>
 

@@ -3,6 +3,64 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "IndoPak";
-  src: local("indopak"), url("./assets//fonts/indopak.ttf") format("truetype");
+    font-family: "IndoPak";
+    src:
+        local("indopak"),
+        url("./assets//fonts/indopak.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "amiri";
+    src:
+        local("amiri"),
+        url("./assets//fonts/amiri/Amiri-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "droid_arabic_kufi";
+    src:
+        local("droid_arabic_kufi"),
+        url("./assets//fonts/droid_arabic_kufi/DroidKufi-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "droid_arabic_naskh";
+    src:
+        local("droid_arabic_naskh"),
+        url("./assets//fonts/droid_arabic_naskh/DroidNaskh-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "al_messiri";
+    src:
+        local("al_messiri"),
+        url("./assets//fonts/el_messiri/elmessiri-regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "jomhuria";
+    src:
+        local("jomhuria"),
+        url("./assets//fonts/jomhuria/Jomhuria-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "lateef";
+    src:
+        local("lateef"),
+        url("./assets//fonts/lateef/LateefRegOT.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "mothanna";
+    src:
+        local("mothanna"),
+        url("./assets//fonts/mothanna/Mothanna.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "scheherazade";
+    src:
+        local("scheherazade"),
+        url("./assets//fonts/scheherazade/ScheherazadeRegOT.ttf") format("truetype");
 }
