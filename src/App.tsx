@@ -83,11 +83,7 @@ function App() {
     const cropHeight = canvas.height;
     croppedCanvas.width = cropWidth;
     croppedCanvas.height = cropHeight;
-    croppedCanvasContext!.drawImage(
-      canvas,
-      cropPositionLeft,
-      cropPositionTop
-    );
+    croppedCanvasContext!.drawImage(canvas, cropPositionLeft, cropPositionTop);
     const base64Image = croppedCanvas.toDataURL();
     const link = document.createElement("a");
     link.href = base64Image;
@@ -123,6 +119,72 @@ function App() {
         }}
         className="w-full flex flex-col gap-2"
       >
+        <div
+          ref={ref}
+          style={{
+            aspectRatio: aspectRatioNum,
+            width: "100%",
+            color: textColor,
+            padding: `${padding}px`,
+            background:
+              backgroundType === "gradient"
+                ? `linear-gradient(to right, ${gradient1Color}, ${gradient2Color})`
+                : `url(${backgroundImageUrl})`,
+          }}
+          className="aspect-square overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
+        >
+          {showAyah && (
+            <p
+              style={{
+                fontSize: `${fontSize}px`,
+                fontFamily: "indopak",
+              }}
+              className="text-center"
+            >
+              {ayahText}
+            </p>
+          )}
+
+          {showTranslation && (
+            <p
+              style={{
+                fontSize: `${translationFontSize}px`,
+              }}
+              className="text-center font-serif"
+            >
+              {translationText}
+            </p>
+          )}
+
+          <p
+            style={{
+              fontSize: `12px`,
+              fontWeight: "bold",
+            }}
+          >
+            {selectedSurah ? `[ ${ayah} ] [ ${selectedSurah.name} ]` : ""}
+          </p>
+        </div>
+
+        <button
+          onClick={() => {
+            takeScreenshot2(ref.current!);
+            // takeScreenshot(ref.current).then((image: any) => {
+            //   const link = document.createElement("a");
+            //   link.href = image;
+            //   link.download = "ayah.png";
+            //   link.click();
+            // });
+          }}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
+        >
+          Download Image
+        </button>
+
+        <hr className="border-gray-400 w-full" />
+
+        <hr className="border-gray-400 w-full" />
+
         <div className="flex gap-2 items-center w-full">
           <select
             value={surah}
@@ -468,68 +530,6 @@ function App() {
       )}
 
       <hr className="border-gray-400 w-full" />
-
-      <div
-        ref={ref}
-        style={{
-          aspectRatio: aspectRatioNum,
-          width: "100%",
-          color: textColor,
-          padding: `${padding}px`,
-          background:
-            backgroundType === "gradient"
-              ? `linear-gradient(to right, ${gradient1Color}, ${gradient2Color})`
-              : `url(${backgroundImageUrl})`,
-        }}
-        className="aspect-square overflow-clip bg-gradient-to-r from-blue-500 to-blue-700 flex flex-col items-center justify-center"
-      >
-        {showAyah && (
-          <p
-            style={{
-              fontSize: `${fontSize}px`,
-              fontFamily: "indopak",
-            }}
-            className="text-center"
-          >
-            {ayahText}
-          </p>
-        )}
-
-        {showTranslation && (
-          <p
-            style={{
-              fontSize: `${translationFontSize}px`,
-            }}
-            className="text-center font-serif"
-          >
-            {translationText}
-          </p>
-        )}
-
-        <p
-          style={{
-            fontSize: `12px`,
-            fontWeight: "bold",
-          }}
-        >
-          {selectedSurah ? `[ ${ayah} ] [ ${selectedSurah.name} ]` : ""}
-        </p>
-      </div>
-
-      <button
-        onClick={() => {
-          takeScreenshot2(ref.current!);
-          // takeScreenshot(ref.current).then((image: any) => {
-          //   const link = document.createElement("a");
-          //   link.href = image;
-          //   link.download = "ayah.png";
-          //   link.click();
-          // });
-        }}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded px-16"
-      >
-        Download Image
-      </button>
     </div>
   );
 }
